@@ -1,31 +1,27 @@
 part of nyxx_pagination;
 
-abstract class IPagination {
+abstract class IPagination<T, S extends MessageBuilder> {
   int currentPage = 1;
 
   int get maxPage;
-  INyxx get client;
+
+  S initMessageBuilder();
+  S getMessageBuilderForPage(int page, S currentBuilder);
+  FutureOr<void> updatePage(int page, S currentBuilder, T target);
 
   void onFirstPageButtonClicked() {
-    currentPage = 1;
-    updatePage();
+    this.currentPage = 1;
   }
 
   void onPreviousPageButtonClicked() {
-    currentPage = (currentPage - 1).clamp(1, maxPage);
-    updatePage();
+    this.currentPage = (this.currentPage - 1).clamp(1, maxPage);
   }
 
   void onNextPageButtonClicked() {
     currentPage = (currentPage + 1).clamp(1, maxPage);
-    updatePage();
   }
 
   void onLastPageButtonClicked() {
     currentPage = maxPage;
-    updatePage();
   }
-
-  FutureOr<void> updatePage();
-  FutureOr<void> setup();
 }

@@ -1,54 +1,62 @@
 part of nyxx_pagination;
 
-abstract class ComponentPagination extends IPagination {
-  @override
-  final Nyxx client;
+abstract class IComponentPagination extends IPagination<ButtonInteractionEvent, ComponentMessageBuilder> {
   final Interactions interactions;
-
-  late final ComponentMessageBuilder messageBuilder;
   late final String customPreId;
 
-  late Message resultingMessage;
+  late ComponentMessageBuilder _builder;
 
-  ComponentPagination(this.client, this.interactions) {
+  IComponentPagination(this.interactions) {
     this.customPreId = randomAlpha(5);
-    this.messageBuilder = ComponentMessageBuilder();
-
-    setupButtons(this.messageBuilder);
   }
 
-  @override
-  FutureOr<void> setup() {
-    setupButtons(messageBuilder);
-  }
-
-  @override
-  FutureOr<void> updatePage() => this.resultingMessage.edit(this.messageBuilder);
-
-  FutureOr<void> setupButtons(ComponentMessageBuilder builder) {
+  ComponentMessageBuilder initMessageBuilder() {
     final firstPageButtonId = "${customPreId}firstPage";
     final firstPageButton = ButtonBuilder("<<", firstPageButtonId, ComponentStyle.secondary);
-    interactions.onButtonEvent.where((event) => event.interaction.customId == firstPageButtonId).listen((event) => onFirstPageButtonClicked());
+    interactions.onButtonEvent.where((event) => event.interaction.customId == firstPageButtonId).listen((event) async {
+      await event.acknowledge();
+
+      this.onFirstPageButtonClicked();
+      updatePage(this.currentPage, this._builder, event);
+    });
 
     final previousPageButtonId = "${customPreId}previousPage";
     final previousPageButton = ButtonBuilder("<", previousPageButtonId, ComponentStyle.secondary);
-    interactions.onButtonEvent.where((event) => event.interaction.customId == previousPageButtonId).listen((event) => onPreviousPageButtonClicked());
+    interactions.onButtonEvent.where((event) => event.interaction.customId == previousPageButtonId).listen((event) async {
+      await event.acknowledge();
+
+      this.onPreviousPageButtonClicked();
+      updatePage(this.currentPage, this._builder, event);
+    });
 
     final nextPageButtonId = "${customPreId}nextPage";
     final nextPageButton = ButtonBuilder(">", nextPageButtonId, ComponentStyle.secondary);
-    interactions.onButtonEvent.where((event) => event.interaction.customId == nextPageButtonId).listen((event) => onNextPageButtonClicked());
+    interactions.onButtonEvent.where((event) => event.interaction.customId == nextPageButtonId).listen((event) async {
+      await event.acknowledge();
+
+      this.onNextPageButtonClicked();
+      updatePage(this.currentPage, this._builder, event);
+    });
 
     final lastPageButtonId = "${customPreId}lastPage";
     final lastPageButton = ButtonBuilder(">>", lastPageButtonId, ComponentStyle.secondary);
-    interactions.onButtonEvent.where((event) => event.interaction.customId == lastPageButtonId).listen((event) => onLastPageButtonClicked());
+    interactions.onButtonEvent.where((event) => event.interaction.customId == lastPageButtonId).listen((event) async {
+      await event.acknowledge();
 
-    builder.components = [
-      [
-        firstPageButton,
-        previousPageButton,
-        nextPageButton,
-        lastPageButton,
-      ]
-    ];
+      this.onLastPageButtonClicked();
+      updatePage(this.currentPage, this._builder, event);
+    });
+
+    this._builder = ComponentMessageBuilder()
+      ..components = [
+        [
+          firstPageButton,
+          previousPageButton,
+          nextPageButton,
+          lastPageButton,
+        ]
+      ];
+
+    return this.getMessageBuilderForPage(1, this._builder);
   }
 }

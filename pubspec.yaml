@@ -7,7 +7,7 @@ environment:
 
 dependencies:
   nyxx: ^2.0.0-rc.12
-  nyxx_interactions: ^2.0.0-rc.17
+  nyxx_interactions: ^2.0.0-rc.19
   random_string: ^2.3.1
 
 dev_dependencies:

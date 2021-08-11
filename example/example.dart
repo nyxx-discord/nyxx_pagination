@@ -4,36 +4,38 @@ import "package:nyxx/nyxx.dart";
 import "package:nyxx_interactions/interactions.dart";
 import "package:nyxx_pagination/nyxx_pagination.dart";
 
-class MyCustomPagination extends ComponentPagination {
-  @override
-  // TODO: implement maxPage
-   int get maxPage => this.pages.length;
-
-  late final List<String> pages;
-
-  MyCustomPagination(Nyxx client, Interactions interactions) : super(client, interactions) {
-    this.pages = [
-      "this is first page",
-      "this is second page",
-    ];
-  }
+class MyCustomPagination extends IComponentPagination {
+  List<String> get pages => [
+    "This is first page",
+    "This is second page",
+  ];
 
   @override
-  FutureOr<void> updatePage() {
-    this.messageBuilder.content = this.pages[this.currentPage];
+  int get maxPage => this.pages.length;
 
-    super.updatePage();
+  MyCustomPagination(Interactions interactions): super(interactions);
+
+  @override
+  ComponentMessageBuilder getMessageBuilderForPage(int page, ComponentMessageBuilder currentBuilder) =>
+      currentBuilder..content = pages[page - 1];
+
+  @override
+  FutureOr<void> updatePage(int page, ComponentMessageBuilder currentBuilder, ButtonInteractionEvent target) {
+    target.respond(this.getMessageBuilderForPage(page, currentBuilder));
   }
 }
 
 FutureOr<void> paginationExampleInteraction(InteractionEvent event) {
-  // final pagination = MyCustomPagination(Nyxx("", 0), event.interaction);
+  final pagination = MyCustomPagination(event.interactions);
+
+  event.respond(pagination.initMessageBuilder());
 }
 
 void main() {
   final bot = Nyxx("<TOKEN>", GatewayIntents.allUnprivileged);
 
   final interaction = Interactions(bot)
-    ..registerSlashCommand(SlashCommandBuilder("paginate", "This is pagination example", [])
-      ..registerHandler(paginationExampleInteraction));
+    ..registerSlashCommand(SlashCommandBuilder("paginated", "This is pagination example", [], guild: 302360552993456135.toSnowflake())
+      ..registerHandler(paginationExampleInteraction))
+    ..syncOnReady();
 }
