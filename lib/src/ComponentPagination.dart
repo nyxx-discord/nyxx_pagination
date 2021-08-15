@@ -11,7 +11,7 @@ abstract class IComponentPagination extends IPagination<ButtonInteractionEvent, 
 
   /// Creates new paginator using interactions
   IComponentPagination(this.interactions) {
-    this.customPreId = randomAlpha(5);
+    this.customPreId = randomAlpha(10);
   }
 
   /// Inits [ComponentMessageBuilder] with buttons needed for pagination. And hooks needed events.
