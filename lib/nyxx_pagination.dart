@@ -1,6 +1,6 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
+/// Pagination module for nyxx. Allows creating paginated and interactive content
+/// in message. Uses nyxx_interactions to handle pagination in message. Also
+/// provides emoji-based legacy way of doing pagination.
 library nyxx_pagination;
 
 import "dart:async";
