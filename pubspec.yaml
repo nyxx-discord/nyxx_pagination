@@ -1,6 +1,9 @@
 name: nyxx_pagination
 description: A starting point for Dart libraries or applications.
 version: 1.0.0-dev.0
+issue_tracker: https://github.com/nyxx-discord/nyxx_pagination/issues
+repository: https://github.com/nyxx-discord/nyxx_pagination
+documentation: https://nyxx.l7ssha.xyz/nyxx_pagination
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -10,5 +13,5 @@ dependencies:
   nyxx_interactions: ^2.0.0-rc.19
   random_string: ^2.3.1
 
-dev_dependencies:
-  test: ^1.16.0
+#dev_dependencies:
+#  test: ^1.16.0

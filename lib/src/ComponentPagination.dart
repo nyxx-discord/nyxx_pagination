@@ -6,8 +6,8 @@ abstract class IComponentPagination extends IPagination<ButtonInteractionEvent, 
   final Interactions interactions;
   /// Custom id for this instance of paginator that different paginators could be recognized.
   late final String customPreId;
-
-  late ComponentMessageBuilder _builder;
+  /// Message builder used to create paginated messages
+  late ComponentMessageBuilder builder;
 
   /// Creates new paginator using interactions
   IComponentPagination(this.interactions) {
@@ -23,7 +23,7 @@ abstract class IComponentPagination extends IPagination<ButtonInteractionEvent, 
       await event.acknowledge();
 
       this.onFirstPageButtonClicked();
-      updatePage(this.currentPage, this._builder, event);
+      updatePage(this.currentPage, this.builder, event);
     });
 
     final previousPageButtonId = "${customPreId}previousPage";
@@ -32,7 +32,7 @@ abstract class IComponentPagination extends IPagination<ButtonInteractionEvent, 
       await event.acknowledge();
 
       this.onPreviousPageButtonClicked();
-      updatePage(this.currentPage, this._builder, event);
+      updatePage(this.currentPage, this.builder, event);
     });
 
     final nextPageButtonId = "${customPreId}nextPage";
@@ -41,7 +41,7 @@ abstract class IComponentPagination extends IPagination<ButtonInteractionEvent, 
       await event.acknowledge();
 
       this.onNextPageButtonClicked();
-      updatePage(this.currentPage, this._builder, event);
+      updatePage(this.currentPage, this.builder, event);
     });
 
     final lastPageButtonId = "${customPreId}lastPage";
@@ -50,10 +50,10 @@ abstract class IComponentPagination extends IPagination<ButtonInteractionEvent, 
       await event.acknowledge();
 
       this.onLastPageButtonClicked();
-      updatePage(this.currentPage, this._builder, event);
+      updatePage(this.currentPage, this.builder, event);
     });
 
-    this._builder = ComponentMessageBuilder()
+    final builder = ComponentMessageBuilder()
       ..components = [
         [
           firstPageButton,
@@ -63,8 +63,13 @@ abstract class IComponentPagination extends IPagination<ButtonInteractionEvent, 
         ]
       ];
 
-    return this.getMessageBuilderForPage(1, this._builder);
+    this.builder = this.initHook(builder);
+
+    return this.getMessageBuilderForPage(1, this.builder);
   }
+
+  /// Called after initializing basic components.
+  ComponentMessageBuilder initHook(ComponentMessageBuilder builder) => builder;
 }
 
 /// Base class for custom interaction paginator.
