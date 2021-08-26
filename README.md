@@ -34,4 +34,4 @@ void main() {
 Please file feature requests and bugs at the [issue tracker][tracker].
 
 [tracker]: https://github.com/nyxx-discord/nyxx_pagination/issues
-[nyxx]: https://github.com/nyxx-discord/nyxx_pagination/issues
+[nyxx]: https://github.com/nyxx-discord/nyxx

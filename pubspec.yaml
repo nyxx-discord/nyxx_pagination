@@ -1,5 +1,5 @@
 name: nyxx_pagination
-description: A starting point for Dart libraries or applications.
+description: Pagination utility for nyxx library
 version: 1.0.0
 issue_tracker: https://github.com/nyxx-discord/nyxx_pagination/issues
 repository: https://github.com/nyxx-discord/nyxx_pagination
