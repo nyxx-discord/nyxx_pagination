@@ -33,7 +33,7 @@ jobs:
       - name: Deploy nyxx dev docs
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_SERVER_KEY }}
           ARGS: "-rltDzvO"
           SOURCE: "nyxx_pagination/doc/api/"
           REMOTE_HOST: ${{ secrets.DEPLOY_REMOTE_HOST }}
