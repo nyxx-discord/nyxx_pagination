@@ -1,0 +1,41 @@
+name: deploy dev docs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docs-pagination:
+    name: Deploy nyxx_pagination package docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.pub_cache
+          key: ${{ runner.os }}
+
+      - name: Setup Dart Action
+        uses: cedx/setup-dart@v2.3.0
+        with:
+         release-channel: stable
+
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Generate docs
+        run: dartdoc
+
+      - name: Deploy nyxx dev docs
+        uses: easingthemes/ssh-deploy@v2.1.5
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ARGS: "-rltDzvO"
+          SOURCE: "nyxx_pagination/doc/api/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: "${{ secrets.REMOTE_TARGET }}/dartdocs/nyxx_pagination/"
