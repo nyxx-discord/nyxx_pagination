@@ -33,9 +33,9 @@ jobs:
       - name: Deploy nyxx dev docs
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
           ARGS: "-rltDzvO"
           SOURCE: "nyxx_pagination/doc/api/"
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: "${{ secrets.REMOTE_TARGET }}/dartdocs/nyxx_pagination/"
+          REMOTE_HOST: ${{ secrets.DEPLOY_REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.DEPLOY_REMOTE_USER }}
+          TARGET: "${{ secrets.DEPLOY_REMOTE_TARGET }}/dartdocs/nyxx_pagination/"
