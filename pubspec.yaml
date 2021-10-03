@@ -1,6 +1,6 @@
 name: nyxx_pagination
 description: Pagination utility for nyxx library
-version: 1.0.0
+version: 1.0.1
 issue_tracker: https://github.com/nyxx-discord/nyxx_pagination/issues
 repository: https://github.com/nyxx-discord/nyxx_pagination
 documentation: https://nyxx.l7ssha.xyz/nyxx_pagination
