@@ -3,12 +3,12 @@ name: deploy dev docs
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
-  docs-pagination:
-    name: Deploy nyxx_pagination package docs
+  deploy-docs:
     runs-on: ubuntu-latest
+
     steps:
       - name: Cache
         uses: actions/cache@v2
@@ -38,4 +38,4 @@ jobs:
           SOURCE: "doc/api/"
           REMOTE_HOST: ${{ secrets.DEPLOY_REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.DEPLOY_REMOTE_USER }}
-          TARGET: "${{ secrets.DEPLOY_REMOTE_TARGET }}/dartdocs/nyxx_pagination/"
+          TARGET: "${{ secrets.DEPLOY_REMOTE_TARGET }}/dartdocs/nyxx_lavalink/"

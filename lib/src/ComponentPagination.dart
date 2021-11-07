@@ -4,8 +4,10 @@ part of nyxx_pagination;
 abstract class IComponentPagination extends IPagination<ButtonInteractionEvent, ComponentMessageBuilder> {
   /// Reference to [Interactions]
   final Interactions interactions;
+
   /// Custom id for this instance of paginator that different paginators could be recognized.
   late final String customPreId;
+
   /// Message builder used to create paginated messages
   late ComponentMessageBuilder builder;
 
@@ -76,7 +78,7 @@ abstract class IComponentPagination extends IPagination<ButtonInteractionEvent, 
 /// [getMessageBuilderForPage] needs to be implemented in order to work.
 abstract class ComponentPagination extends IComponentPagination {
   /// Creates instance of [ComponentPagination]
-  ComponentPagination(Interactions interactions): super(interactions);
+  ComponentPagination(Interactions interactions) : super(interactions);
 
   @override
   FutureOr<void> updatePage(int page, ComponentMessageBuilder currentBuilder, ButtonInteractionEvent target) {
@@ -93,11 +95,10 @@ class EmbedComponentPagination extends ComponentPagination {
   final List<EmbedBuilder> embeds;
 
   /// Creates instance of [EmbedComponentPagination]
-  EmbedComponentPagination(Interactions interactions, this.embeds): super(interactions);
+  EmbedComponentPagination(Interactions interactions, this.embeds) : super(interactions);
 
   @override
-  ComponentMessageBuilder getMessageBuilderForPage(int page, ComponentMessageBuilder currentBuilder) =>
-      currentBuilder..embeds = [embeds[page - 1]];
+  ComponentMessageBuilder getMessageBuilderForPage(int page, ComponentMessageBuilder currentBuilder) => currentBuilder..embeds = [embeds[page - 1]];
 }
 
 /// Paginator where each page is message content
@@ -109,9 +110,8 @@ class SimpleComponentPagination extends ComponentPagination {
   final List<String> contentPages;
 
   /// Creates instance of [SimpleComponentPagination]
-  SimpleComponentPagination(Interactions interactions, this.contentPages): super(interactions);
+  SimpleComponentPagination(Interactions interactions, this.contentPages) : super(interactions);
 
   @override
-  ComponentMessageBuilder getMessageBuilderForPage(int page, ComponentMessageBuilder currentBuilder) =>
-      currentBuilder..content = contentPages[page - 1];
+  ComponentMessageBuilder getMessageBuilderForPage(int page, ComponentMessageBuilder currentBuilder) => currentBuilder..content = contentPages[page - 1];
 }
