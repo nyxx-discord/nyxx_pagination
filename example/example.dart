@@ -4,7 +4,7 @@ import "package:nyxx/nyxx.dart";
 import "package:nyxx_interactions/interactions.dart";
 import "package:nyxx_pagination/nyxx_pagination.dart";
 
-FutureOr<void> paginationExampleInteraction(InteractionEvent event) {
+FutureOr<void> paginationExampleInteraction(SlashCommandInteractionEvent event) {
   final paginator = EmbedComponentPagination(event.interactions, [
     EmbedBuilder()..description = "This is first page",
     EmbedBuilder()..description = "This is second page",

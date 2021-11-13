@@ -41,7 +41,7 @@ class MyCustomPagination extends IComponentPagination {
   }
 }
 
-FutureOr<void> paginationExampleInteraction(InteractionEvent event) {
+FutureOr<void> paginationExampleInteraction(SlashCommandInteractionEvent event) {
   final pagination = MyCustomPagination(event.interactions);
 
   event.respond(pagination.initMessageBuilder());
