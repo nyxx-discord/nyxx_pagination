@@ -1,6 +1,6 @@
 name: nyxx_pagination
 description: Pagination utility for nyxx library
-version: 2.0.0-dev.0
+version: 2.0.0
 issue_tracker: https://github.com/nyxx-discord/nyxx_pagination/issues
 repository: https://github.com/nyxx-discord/nyxx_pagination
 documentation: https://nyxx.l7ssha.xyz/nyxx_pagination
@@ -9,8 +9,8 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  nyxx: ^3.0.0-dev.0
-  nyxx_interactions: ^3.0.0-dev.0
+  nyxx: ^3.0.0
+  nyxx_interactions: ^3.0.0
   random_string: ^2.3.1
 
 dev_dependencies:
