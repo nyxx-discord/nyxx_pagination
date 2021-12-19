@@ -2,11 +2,5 @@
 /// in message. Uses nyxx_interactions to handle pagination in message.
 library nyxx_pagination;
 
-import "dart:async";
-
-import "package:nyxx/nyxx.dart";
-import "package:nyxx_interactions/interactions.dart";
-import "package:random_string/random_string.dart";
-
-part "src/IPagination.dart";
-part "src/ComponentPagination.dart";
+export "src/component_pagination.dart";
+export "src/pagination.dart";

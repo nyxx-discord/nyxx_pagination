@@ -1,40 +1,40 @@
 import "dart:async";
 
 import "package:nyxx/nyxx.dart";
-import "package:nyxx_interactions/interactions.dart";
+import 'package:nyxx_interactions/nyxx_interactions.dart';
 import "package:nyxx_pagination/nyxx_pagination.dart";
 
-class MyCustomPagination extends IComponentPagination {
+class MyCustomPagination extends ComponentPaginationAbstract {
   List<String> get pages => [
     "This is first page",
     "This is second page",
   ];
 
   @override
-  int get maxPage => this.pages.length;
+  int get maxPage => pages.length;
 
-  MyCustomPagination(Interactions interactions): super(interactions);
+  MyCustomPagination(IInteractions interactions): super(interactions);
 
   @override
   ComponentMessageBuilder getMessageBuilderForPage(int page, ComponentMessageBuilder currentBuilder) =>
       currentBuilder..content = pages[page - 1];
 
   @override
-  FutureOr<void> updatePage(int page, ComponentMessageBuilder currentBuilder, ButtonInteractionEvent target) {
-    target.respond(this.getMessageBuilderForPage(page, currentBuilder));
+  FutureOr<void> updatePage(int page, ComponentMessageBuilder currentBuilder, IButtonInteractionEvent target) {
+    target.respond(getMessageBuilderForPage(page, currentBuilder));
   }
 }
 
-FutureOr<void> paginationExampleInteraction(SlashCommandInteractionEvent event) {
+FutureOr<void> paginationExampleInteraction(ISlashCommandInteractionEvent event) {
   final pagination = MyCustomPagination(event.interactions);
 
   event.respond(pagination.initMessageBuilder());
 }
 
 void main() {
-  final bot = Nyxx("<TOKEN>", GatewayIntents.allUnprivileged);
+  final bot = NyxxFactory.createNyxxWebsocket("<TOKEN>", GatewayIntents.allUnprivileged);
 
-  final interaction = Interactions(bot)
+  IInteractions.create(WebsocketInteractionBackend(bot))
     ..registerSlashCommand(SlashCommandBuilder("paginated", "This is pagination example", [], guild: 302360552993456135.toSnowflake())
       ..registerHandler(paginationExampleInteraction))
     ..syncOnReady();
