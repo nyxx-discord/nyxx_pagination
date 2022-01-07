@@ -35,6 +35,8 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
   /// Message builder used to create paginated messages
   late ComponentMessageBuilder builder;
 
+  IMessage? message;
+
   /// Creates new paginator using interactions
   ///
   /// The `*Label` and `*Emoji` parameters control the emojis and labels used for the pagination buttons.
@@ -77,31 +79,20 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
 
     // TODO: use ButtonInteractionEvent, currently it is not exported from nyxx_interactions
     StreamSubscription<dynamic> subscription = interactions.events.onButtonEvent.listen((event) async {
-      if (event.interaction.customId == firstPageButtonId) {
+      if ([firstPageButtonId, previousPageButtonId, nextPageButtonId, lastPageButtonId].contains(event.interaction.customId)) {
         await event.acknowledge();
 
-        onFirstPageButtonClicked();
+        message = event.interaction.message;
 
-        updateButtonState();
-        updatePage(currentPage, this.builder, event);
-      } else if (event.interaction.customId == previousPageButtonId) {
-        await event.acknowledge();
-
-        onPreviousPageButtonClicked();
-
-        updateButtonState();
-        updatePage(currentPage, this.builder, event);
-      } else if (event.interaction.customId == nextPageButtonId) {
-        await event.acknowledge();
-
-        onNextPageButtonClicked();
-
-        updateButtonState();
-        updatePage(currentPage, this.builder, event);
-      } else if (event.interaction.customId == lastPageButtonId) {
-        await event.acknowledge();
-
-        onLastPageButtonClicked();
+        if (event.interaction.customId == firstPageButtonId) {
+          onFirstPageButtonClicked();
+        } else if (event.interaction.customId == previousPageButtonId) {
+          onPreviousPageButtonClicked();
+        } else if (event.interaction.customId == nextPageButtonId) {
+          onNextPageButtonClicked();
+        } else if (event.interaction.customId == lastPageButtonId) {
+          onLastPageButtonClicked();
+        }
 
         updateButtonState();
         updatePage(currentPage, this.builder, event);
@@ -109,7 +100,16 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
     });
 
     if (timeout != null) {
-      Future.delayed(timeout!, () => subscription.cancel());
+      Future.delayed(timeout!, () {
+        subscription.cancel();
+
+        firstPageButton.disabled = true;
+        previousPageButton.disabled = true;
+        nextPageButton.disabled = true;
+        lastPageButton.disabled = true;
+
+        message?.edit(this.builder);
+      });
     }
 
     updateButtonState();
