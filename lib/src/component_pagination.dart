@@ -31,6 +31,8 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
   late ComponentMessageBuilder builder;
 
   /// Creates new paginator using interactions
+  ///
+  /// The `*Label` and `*Emoji` parameters control the emojis and labels used for the pagination buttons.
   ComponentPaginationAbstract(
     this.interactions, {
     this.firstLabel = '<<',
@@ -123,6 +125,8 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
 /// [getMessageBuilderForPage] needs to be implemented in order to work.
 abstract class ComponentPaginationBase extends ComponentPaginationAbstract {
   /// Creates instance of [ComponentPaginationBase]
+  ///
+  /// The `*Label` and `*Emoji` parameters control the emojis and labels used for the pagination buttons.
   ComponentPaginationBase(
     IInteractions interactions, {
     String firstLabel = '<<',
@@ -160,6 +164,8 @@ class EmbedComponentPagination extends ComponentPaginationBase {
   final List<EmbedBuilder> embeds;
 
   /// Creates instance of [EmbedComponentPagination]
+  ///
+  /// The `*Label` and `*Emoji` parameters control the emojis and labels used for the pagination buttons.
   EmbedComponentPagination(
     IInteractions interactions,
     this.embeds, {
@@ -196,6 +202,8 @@ class SimpleComponentPagination extends ComponentPaginationBase {
   final List<String> contentPages;
 
   /// Creates instance of [SimpleComponentPagination]
+  ///
+  /// The `*Label` and `*Emoji` parameters control the emojis and labels used for the pagination buttons.
   SimpleComponentPagination(
     IInteractions interactions,
     this.contentPages, {
