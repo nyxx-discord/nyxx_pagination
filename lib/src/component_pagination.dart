@@ -30,39 +30,60 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
   ComponentMessageBuilder initMessageBuilder() {
     final firstPageButtonId = "${customPreId}firstPage";
     final firstPageButton = ButtonBuilder("<<", firstPageButtonId, ComponentStyle.secondary);
+
+    final previousPageButtonId = "${customPreId}previousPage";
+    final previousPageButton = ButtonBuilder("<", previousPageButtonId, ComponentStyle.secondary);
+
+    final nextPageButtonId = "${customPreId}nextPage";
+    final nextPageButton = ButtonBuilder(">", nextPageButtonId, ComponentStyle.secondary);
+
+    final lastPageButtonId = "${customPreId}lastPage";
+    final lastPageButton = ButtonBuilder(">>", lastPageButtonId, ComponentStyle.secondary);
+
+    void updateButtonState() {
+      firstPageButton.disabled = currentPage == 1;
+      previousPageButton.disabled = currentPage == 1;
+      nextPageButton.disabled = currentPage == maxPage;
+      lastPageButton.disabled = currentPage == maxPage;
+    }
+
     interactions.events.onButtonEvent.where((event) => event.interaction.customId == firstPageButtonId).listen((event) async {
       await event.acknowledge();
 
       onFirstPageButtonClicked();
+
+      updateButtonState();
       updatePage(currentPage, this.builder, event);
     });
 
-    final previousPageButtonId = "${customPreId}previousPage";
-    final previousPageButton = ButtonBuilder("<", previousPageButtonId, ComponentStyle.secondary);
     interactions.events.onButtonEvent.where((event) => event.interaction.customId == previousPageButtonId).listen((event) async {
       await event.acknowledge();
 
       onPreviousPageButtonClicked();
+
+      updateButtonState();
       updatePage(currentPage, this.builder, event);
     });
 
-    final nextPageButtonId = "${customPreId}nextPage";
-    final nextPageButton = ButtonBuilder(">", nextPageButtonId, ComponentStyle.secondary);
     interactions.events.onButtonEvent.where((event) => event.interaction.customId == nextPageButtonId).listen((event) async {
       await event.acknowledge();
 
       onNextPageButtonClicked();
+
+      updateButtonState();
       updatePage(currentPage, this.builder, event);
     });
 
-    final lastPageButtonId = "${customPreId}lastPage";
-    final lastPageButton = ButtonBuilder(">>", lastPageButtonId, ComponentStyle.secondary);
     interactions.events.onButtonEvent.where((event) => event.interaction.customId == lastPageButtonId).listen((event) async {
       await event.acknowledge();
 
       onLastPageButtonClicked();
+
+      updateButtonState();
       updatePage(currentPage, this.builder, event);
     });
+
+    updateButtonState();
 
     final builder = ComponentMessageBuilder()
       ..componentRows = [
