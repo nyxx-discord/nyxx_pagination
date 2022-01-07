@@ -13,6 +13,16 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
   /// Custom id for this instance of paginator that different paginators could be recognized.
   late final String customPreId;
 
+  final String firstLabel;
+  final String prevLabel;
+  final String nextLabel;
+  final String lastLabel;
+
+  final IEmoji? firstEmoji;
+  final IEmoji? prevEmoji;
+  final IEmoji? nextEmoji;
+  final IEmoji? lastEmoji;
+
   /// Current page that paginator is on
   @override
   int currentPage = 1;
@@ -21,7 +31,19 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
   late ComponentMessageBuilder builder;
 
   /// Creates new paginator using interactions
-  ComponentPaginationAbstract(this.interactions) {
+  ///
+  /// The `*Label` and `*Emoji` parameters control the emojis and labels used for the pagination buttons.
+  ComponentPaginationAbstract(
+    this.interactions, {
+    this.firstLabel = '<<',
+    this.prevLabel = '<',
+    this.nextLabel = '>',
+    this.lastLabel = '>>',
+    this.firstEmoji,
+    this.prevEmoji,
+    this.nextEmoji,
+    this.lastEmoji,
+  }) {
     customPreId = randomAlpha(10);
   }
 
@@ -29,7 +51,7 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
   @override
   ComponentMessageBuilder initMessageBuilder() {
     final firstPageButtonId = "${customPreId}firstPage";
-    final firstPageButton = ButtonBuilder("<<", firstPageButtonId, ComponentStyle.secondary);
+    final firstPageButton = ButtonBuilder(firstLabel, firstPageButtonId, ComponentStyle.secondary, emoji: firstEmoji);
     interactions.events.onButtonEvent.where((event) => event.interaction.customId == firstPageButtonId).listen((event) async {
       await event.acknowledge();
 
@@ -38,7 +60,7 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
     });
 
     final previousPageButtonId = "${customPreId}previousPage";
-    final previousPageButton = ButtonBuilder("<", previousPageButtonId, ComponentStyle.secondary);
+    final previousPageButton = ButtonBuilder(prevLabel, previousPageButtonId, ComponentStyle.secondary, emoji: prevEmoji);
     interactions.events.onButtonEvent.where((event) => event.interaction.customId == previousPageButtonId).listen((event) async {
       await event.acknowledge();
 
@@ -47,7 +69,7 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
     });
 
     final nextPageButtonId = "${customPreId}nextPage";
-    final nextPageButton = ButtonBuilder(">", nextPageButtonId, ComponentStyle.secondary);
+    final nextPageButton = ButtonBuilder(nextLabel, nextPageButtonId, ComponentStyle.secondary, emoji: nextEmoji);
     interactions.events.onButtonEvent.where((event) => event.interaction.customId == nextPageButtonId).listen((event) async {
       await event.acknowledge();
 
@@ -56,7 +78,7 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
     });
 
     final lastPageButtonId = "${customPreId}lastPage";
-    final lastPageButton = ButtonBuilder(">>", lastPageButtonId, ComponentStyle.secondary);
+    final lastPageButton = ButtonBuilder(lastLabel, lastPageButtonId, ComponentStyle.secondary, emoji: lastEmoji);
     interactions.events.onButtonEvent.where((event) => event.interaction.customId == lastPageButtonId).listen((event) async {
       await event.acknowledge();
 
@@ -103,7 +125,29 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
 /// [getMessageBuilderForPage] needs to be implemented in order to work.
 abstract class ComponentPaginationBase extends ComponentPaginationAbstract {
   /// Creates instance of [ComponentPaginationBase]
-  ComponentPaginationBase(IInteractions interactions) : super(interactions);
+  ///
+  /// The `*Label` and `*Emoji` parameters control the emojis and labels used for the pagination buttons.
+  ComponentPaginationBase(
+    IInteractions interactions, {
+    String firstLabel = '<<',
+    String prevLabel = '<',
+    String nextLabel = '>',
+    String lastLabel = '>>',
+    IEmoji? firstEmoji,
+    IEmoji? prevEmoji,
+    IEmoji? nextEmoji,
+    IEmoji? lastEmoji,
+  }) : super(
+          interactions,
+          firstLabel: firstLabel,
+          prevLabel: prevLabel,
+          nextLabel: nextLabel,
+          lastLabel: lastLabel,
+          firstEmoji: firstEmoji,
+          prevEmoji: prevEmoji,
+          nextEmoji: nextEmoji,
+          lastEmoji: lastEmoji,
+        );
 
   @override
   FutureOr<void> updatePage(int page, ComponentMessageBuilder currentBuilder, IButtonInteractionEvent target) {
@@ -120,7 +164,30 @@ class EmbedComponentPagination extends ComponentPaginationBase {
   final List<EmbedBuilder> embeds;
 
   /// Creates instance of [EmbedComponentPagination]
-  EmbedComponentPagination(IInteractions interactions, this.embeds) : super(interactions);
+  ///
+  /// The `*Label` and `*Emoji` parameters control the emojis and labels used for the pagination buttons.
+  EmbedComponentPagination(
+    IInteractions interactions,
+    this.embeds, {
+    String firstLabel = '<<',
+    String prevLabel = '<',
+    String nextLabel = '>',
+    String lastLabel = '>>',
+    IEmoji? firstEmoji,
+    IEmoji? prevEmoji,
+    IEmoji? nextEmoji,
+    IEmoji? lastEmoji,
+  }) : super(
+          interactions,
+          firstLabel: firstLabel,
+          prevLabel: prevLabel,
+          nextLabel: nextLabel,
+          lastLabel: lastLabel,
+          firstEmoji: firstEmoji,
+          prevEmoji: prevEmoji,
+          nextEmoji: nextEmoji,
+          lastEmoji: lastEmoji,
+        );
 
   @override
   ComponentMessageBuilder getMessageBuilderForPage(int page, ComponentMessageBuilder currentBuilder) => currentBuilder..embeds = [embeds[page - 1]];
@@ -135,7 +202,30 @@ class SimpleComponentPagination extends ComponentPaginationBase {
   final List<String> contentPages;
 
   /// Creates instance of [SimpleComponentPagination]
-  SimpleComponentPagination(IInteractions interactions, this.contentPages) : super(interactions);
+  ///
+  /// The `*Label` and `*Emoji` parameters control the emojis and labels used for the pagination buttons.
+  SimpleComponentPagination(
+    IInteractions interactions,
+    this.contentPages, {
+    String firstLabel = '<<',
+    String prevLabel = '<',
+    String nextLabel = '>',
+    String lastLabel = '>>',
+    IEmoji? firstEmoji,
+    IEmoji? prevEmoji,
+    IEmoji? nextEmoji,
+    IEmoji? lastEmoji,
+  }) : super(
+          interactions,
+          firstLabel: firstLabel,
+          prevLabel: prevLabel,
+          nextLabel: nextLabel,
+          lastLabel: lastLabel,
+          firstEmoji: firstEmoji,
+          prevEmoji: prevEmoji,
+          nextEmoji: nextEmoji,
+          lastEmoji: lastEmoji,
+        );
 
   @override
   ComponentMessageBuilder getMessageBuilderForPage(int page, ComponentMessageBuilder currentBuilder) => currentBuilder..content = contentPages[page - 1];
