@@ -23,6 +23,11 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
   final IEmoji? nextEmoji;
   final IEmoji? lastEmoji;
 
+  /// A timeout after which pagination will be disabled for this message.
+  ///
+  /// Set to `null` to enable pagination forever (or until bot restart).
+  final Duration? timeout;
+
   /// Current page that paginator is on
   @override
   int currentPage = 1;
@@ -43,6 +48,7 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
     this.prevEmoji,
     this.nextEmoji,
     this.lastEmoji,
+    this.timeout,
   }) {
     customPreId = randomAlpha(10);
   }
@@ -69,41 +75,42 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
       lastPageButton.disabled = currentPage == maxPage;
     }
 
-    interactions.events.onButtonEvent.where((event) => event.interaction.customId == firstPageButtonId).listen((event) async {
-      await event.acknowledge();
+    // TODO: use ButtonInteractionEvent, currently it is not exported from nyxx_interactions
+    StreamSubscription<dynamic> subscription = interactions.events.onButtonEvent.listen((event) async {
+      if (event.interaction.customId == firstPageButtonId) {
+        await event.acknowledge();
 
-      onFirstPageButtonClicked();
+        onFirstPageButtonClicked();
 
-      updateButtonState();
-      updatePage(currentPage, this.builder, event);
+        updateButtonState();
+        updatePage(currentPage, this.builder, event);
+      } else if (event.interaction.customId == previousPageButtonId) {
+        await event.acknowledge();
+
+        onPreviousPageButtonClicked();
+
+        updateButtonState();
+        updatePage(currentPage, this.builder, event);
+      } else if (event.interaction.customId == nextPageButtonId) {
+        await event.acknowledge();
+
+        onNextPageButtonClicked();
+
+        updateButtonState();
+        updatePage(currentPage, this.builder, event);
+      } else if (event.interaction.customId == lastPageButtonId) {
+        await event.acknowledge();
+
+        onLastPageButtonClicked();
+
+        updateButtonState();
+        updatePage(currentPage, this.builder, event);
+      }
     });
 
-    interactions.events.onButtonEvent.where((event) => event.interaction.customId == previousPageButtonId).listen((event) async {
-      await event.acknowledge();
-
-      onPreviousPageButtonClicked();
-
-      updateButtonState();
-      updatePage(currentPage, this.builder, event);
-    });
-
-    interactions.events.onButtonEvent.where((event) => event.interaction.customId == nextPageButtonId).listen((event) async {
-      await event.acknowledge();
-
-      onNextPageButtonClicked();
-
-      updateButtonState();
-      updatePage(currentPage, this.builder, event);
-    });
-
-    interactions.events.onButtonEvent.where((event) => event.interaction.customId == lastPageButtonId).listen((event) async {
-      await event.acknowledge();
-
-      onLastPageButtonClicked();
-
-      updateButtonState();
-      updatePage(currentPage, this.builder, event);
-    });
+    if (timeout != null) {
+      Future.delayed(timeout!, () => subscription.cancel());
+    }
 
     updateButtonState();
 
@@ -158,6 +165,7 @@ abstract class ComponentPaginationBase extends ComponentPaginationAbstract {
     IEmoji? prevEmoji,
     IEmoji? nextEmoji,
     IEmoji? lastEmoji,
+    Duration? timeout,
   }) : super(
           interactions,
           firstLabel: firstLabel,
@@ -168,6 +176,7 @@ abstract class ComponentPaginationBase extends ComponentPaginationAbstract {
           prevEmoji: prevEmoji,
           nextEmoji: nextEmoji,
           lastEmoji: lastEmoji,
+          timeout: timeout,
         );
 
   @override
@@ -198,6 +207,7 @@ class EmbedComponentPagination extends ComponentPaginationBase {
     IEmoji? prevEmoji,
     IEmoji? nextEmoji,
     IEmoji? lastEmoji,
+    Duration? timeout,
   }) : super(
           interactions,
           firstLabel: firstLabel,
@@ -208,6 +218,7 @@ class EmbedComponentPagination extends ComponentPaginationBase {
           prevEmoji: prevEmoji,
           nextEmoji: nextEmoji,
           lastEmoji: lastEmoji,
+          timeout: timeout,
         );
 
   @override
@@ -236,6 +247,7 @@ class SimpleComponentPagination extends ComponentPaginationBase {
     IEmoji? prevEmoji,
     IEmoji? nextEmoji,
     IEmoji? lastEmoji,
+    Duration? timeout,
   }) : super(
           interactions,
           firstLabel: firstLabel,
@@ -246,6 +258,7 @@ class SimpleComponentPagination extends ComponentPaginationBase {
           prevEmoji: prevEmoji,
           nextEmoji: nextEmoji,
           lastEmoji: lastEmoji,
+          timeout: timeout,
         );
 
   @override
