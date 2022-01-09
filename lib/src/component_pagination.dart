@@ -86,11 +86,13 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
     // TODO: use ButtonInteractionEvent, currently it is not exported from nyxx_interactions
     StreamSubscription<dynamic> subscription = interactions.events.onButtonEvent.listen((event) async {
       if ([firstPageButtonId, previousPageButtonId, nextPageButtonId, lastPageButtonId].contains(event.interaction.customId)) {
+        await event.acknowledge();
+
         if (user != null && (event.interaction.userAuthor ?? await event.interaction.memberAuthor!.user.getOrDownload()).id != user!.id) {
+          await event.respond(this.builder);
+
           return;
         }
-
-        await event.acknowledge();
 
         message = event.interaction.message;
 
