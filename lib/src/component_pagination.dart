@@ -88,7 +88,7 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
       if ([firstPageButtonId, previousPageButtonId, nextPageButtonId, lastPageButtonId].contains(event.interaction.customId)) {
         await event.acknowledge();
 
-        if (user != null && (event.interaction.userAuthor ?? await event.interaction.memberAuthor!.user.getOrDownload()).id != user!.id) {
+        if (user != null && (event.interaction.userAuthor ?? event.interaction.memberAuthor!.user as SnowflakeEntity).id != user!.id) {
           await event.respond(this.builder);
 
           return;
