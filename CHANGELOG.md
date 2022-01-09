@@ -1,3 +1,10 @@
+## 2.1.0
+__07.01.2022__
+
+- Add option to customize labels and emoji sent with pagination buttons
+- Add optional timeout after which pagination is disabled
+- Disable buttons which cannot be used
+
 ## 2.0.0
 __19.12.2021__
 
