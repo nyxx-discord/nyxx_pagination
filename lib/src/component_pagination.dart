@@ -89,7 +89,7 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
     final lastPageButton = ButtonBuilder(lastLabel, lastPageButtonId, ComponentStyle.secondary, emoji: lastEmoji);
     interactions.events.onButtonEvent.where((event) => event.interaction.customId == lastPageButtonId).listen((event) async {
       await event.acknowledge();
-    final lastPageButton = ButtonBuilder(lastLabel, lastPageButtonId, ComponentStyle.secondary, emoji: lastEmoji);
+    });
 
     void updateButtonState() {
       firstPageButton.disabled = currentPage == 1;
