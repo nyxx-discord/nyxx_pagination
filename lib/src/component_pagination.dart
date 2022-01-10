@@ -23,6 +23,11 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
   final IEmoji? nextEmoji;
   final IEmoji? lastEmoji;
 
+  /// The user that can use the pagination.
+  ///
+  /// Set to `null` to allow anyone to use pagination on this message.
+  final IUser? user;
+
   /// A timeout after which pagination will be disabled for this message.
   ///
   /// Set to `null` to enable pagination forever (or until bot restart).
@@ -51,6 +56,7 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
     this.nextEmoji,
     this.lastEmoji,
     this.timeout,
+    this.user,
   }) {
     customPreId = randomAlpha(10);
   }
@@ -81,6 +87,12 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
     StreamSubscription<dynamic> subscription = interactions.events.onButtonEvent.listen((event) async {
       if ([firstPageButtonId, previousPageButtonId, nextPageButtonId, lastPageButtonId].contains(event.interaction.customId)) {
         await event.acknowledge();
+
+        if (user != null && (event.interaction.userAuthor ?? event.interaction.memberAuthor!.user as SnowflakeEntity).id != user!.id) {
+          await event.respond(this.builder);
+
+          return;
+        }
 
         message = event.interaction.message;
 
@@ -166,6 +178,7 @@ abstract class ComponentPaginationBase extends ComponentPaginationAbstract {
     IEmoji? nextEmoji,
     IEmoji? lastEmoji,
     Duration? timeout,
+    IUser? user,
   }) : super(
           interactions,
           firstLabel: firstLabel,
@@ -177,6 +190,7 @@ abstract class ComponentPaginationBase extends ComponentPaginationAbstract {
           nextEmoji: nextEmoji,
           lastEmoji: lastEmoji,
           timeout: timeout,
+          user: user,
         );
 
   @override
@@ -208,6 +222,7 @@ class EmbedComponentPagination extends ComponentPaginationBase {
     IEmoji? nextEmoji,
     IEmoji? lastEmoji,
     Duration? timeout,
+    IUser? user,
   }) : super(
           interactions,
           firstLabel: firstLabel,
@@ -219,6 +234,7 @@ class EmbedComponentPagination extends ComponentPaginationBase {
           nextEmoji: nextEmoji,
           lastEmoji: lastEmoji,
           timeout: timeout,
+          user: user,
         );
 
   @override
@@ -248,6 +264,7 @@ class SimpleComponentPagination extends ComponentPaginationBase {
     IEmoji? nextEmoji,
     IEmoji? lastEmoji,
     Duration? timeout,
+    IUser? user,
   }) : super(
           interactions,
           firstLabel: firstLabel,
@@ -259,6 +276,7 @@ class SimpleComponentPagination extends ComponentPaginationBase {
           nextEmoji: nextEmoji,
           lastEmoji: lastEmoji,
           timeout: timeout,
+          user: user,
         );
 
   @override
