@@ -65,16 +65,16 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
   @override
   ComponentMessageBuilder initMessageBuilder() {
     final firstPageButtonId = "${customPreId}firstPage";
-    final firstPageButton = ButtonBuilder(firstLabel, firstPageButtonId, ComponentStyle.secondary, emoji: firstEmoji);
+    final firstPageButton = ButtonBuilder(firstLabel, firstPageButtonId, ButtonStyle.secondary, emoji: firstEmoji);
 
     final previousPageButtonId = "${customPreId}previousPage";
-    final previousPageButton = ButtonBuilder(prevLabel, previousPageButtonId, ComponentStyle.secondary, emoji: prevEmoji);
+    final previousPageButton = ButtonBuilder(prevLabel, previousPageButtonId, ButtonStyle.secondary, emoji: prevEmoji);
 
     final nextPageButtonId = "${customPreId}nextPage";
-    final nextPageButton = ButtonBuilder(nextLabel, nextPageButtonId, ComponentStyle.secondary, emoji: nextEmoji);
+    final nextPageButton = ButtonBuilder(nextLabel, nextPageButtonId, ButtonStyle.secondary, emoji: nextEmoji);
 
     final lastPageButtonId = "${customPreId}lastPage";
-    final lastPageButton = ButtonBuilder(lastLabel, lastPageButtonId, ComponentStyle.secondary, emoji: lastEmoji);
+    final lastPageButton = ButtonBuilder(lastLabel, lastPageButtonId, ButtonStyle.secondary, emoji: lastEmoji);
 
     void updateButtonState() {
       firstPageButton.disabled = currentPage == 1;
