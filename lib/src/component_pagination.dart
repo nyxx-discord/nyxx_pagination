@@ -128,7 +128,11 @@ abstract class ComponentPaginationAbstract extends IPagination<IButtonInteractio
 
     final builder = ComponentMessageBuilder()
       ..componentRows = [
-          ComponentRowBuilder()..addComponent(firstPageButton)..addComponent(previousPageButton)..addComponent(nextPageButton)..addComponent(lastPageButton),
+        ComponentRowBuilder()
+          ..addComponent(firstPageButton)
+          ..addComponent(previousPageButton)
+          ..addComponent(nextPageButton)
+          ..addComponent(lastPageButton),
       ];
 
     this.builder = initHook(builder);
