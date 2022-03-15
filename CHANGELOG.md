@@ -1,3 +1,13 @@
+## 2.2.0
+__15.03.2022__
+
+- Update nyxx_interactions to 4.0.0
+
+## 2.2.0-dev.0
+__13.02.2022__
+
+- Update nyxx_interactions to 4.0.0-dev
+
 ## 2.1.0
 __07.01.2022__
 
