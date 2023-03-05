@@ -9,7 +9,7 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  nyxx: ^4.0.0
+  nyxx: ^5.0.0
   nyxx_interactions: ^4.0.0
   random_string: ^2.3.1
 
